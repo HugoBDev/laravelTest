@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloController;
-use App\Models\Post;
+use App\Http\Controllers\HouseProjectController;
+use App\Models\HouseProject;
 
 Route::get('/', function () {
     return view('welcome');
@@ -11,26 +12,12 @@ Route::get('/', function () {
 
 Route::get('/accueil', [HelloController::class, "index"]);
 
+Route::post('/house-projects', [HouseProjectController::class, 'store']);
 
+Route::get('/house-projects', function () {
+    return response()->json(['message' => 'Liste des projets de maison', HouseProject::all()], 201);
+});
 
-
-Route::prefix('/blog')->group(function () {
-    Route::get('/', function () {
-
-        $post = new Post();
-        $post->title = 'mon premier article'; 
-        $post->slug = 'mon premier-article';
-        $post->content = 'Mon contenu';
-        $post->save();
-
-     return $post ;
-
-
-
-     
-        return view('welcome');
-    });
-    Route::get('/test', function () {
-        return 'ceci est le test';
-    })->name('blog.show');
+Route::get('/house-projects/{id}', function ($id) {
+    return HouseProject::find($id);
 });
